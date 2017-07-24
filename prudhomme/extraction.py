@@ -74,8 +74,7 @@ def exploitation(jurinet):
 
 
 if __name__ == '__main__':
-    from load import jurinet_2015_prudhom
-#    jurinet = jurinet_2015_prudhom()
-
+    from load_data import jurinet_2015_prudhom
+    jurinet = jurinet_2015_prudhom()
     tt = exploitation(jurinet)
 

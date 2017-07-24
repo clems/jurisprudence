@@ -41,3 +41,4 @@ def jurinet_2015_prudhom():
     cond = XML.str.contains("prud'hom") | XML.str.contains("Prud'hom") | XML.str.contains("PRUD'")
     # 2635 dossiers
     return jurinet[cond]
+

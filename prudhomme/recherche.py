@@ -18,10 +18,6 @@ from os.path import join
 ### Étude des fichiers fournis
 ###############################
 
-path_data_recues = 'D:\data\prudhommes'
-#echantillon = pd.read_excel(join(path_data_recues, 'echantillonbaselicenciements.xlsx'))
-
-
 def _test_jurinet(func, jurinet, nrows=0):
     ''' fait un test sur la base jurinet 
         Si nrows est différent de zéro, on fait tourner sur un sous-echantillon
@@ -263,49 +259,3 @@ if __name__ == '__main__':
 
 
 
-#
-#
-#####
-### travail sur la date d'embauche
-#    test = _test(lambda x: print_recherche('ancienneté', x, 14), on = 'pdf')
-#    test = _test(lambda x: x.count('ancienneté'), on = 'pdf')
-#
-
-
-#plus_de_ans
-#sachant que le salarié a plus de deux ans ancienneté, test sur durée.
-#parfois on a la date d'embauche.
-#
-#et que l'enterprise à plus de 11 salarié.
-#Nom de l'entreprise et SIRET
-#
-#
-#Salaire du salarié avant le licenciement.
-#
-#Le salaire est le plus dur. Souvent le salaire brut d'embauche
-#mais un salaire brut évalué regardé réumnération
-#
-#indemnité peut être noté en mois ou en euros
-#
-#proffesion :
-#    les fonctions de
-#
-#temps partiel
-#
-#type licenciement
-#    'économique ou non', 'difficulté'
-#
-#la colonne Q: chance de retrouver un emploi. Pas de manière automatique.
-#
-#Commune localisation de l'entreprise.
-#Lieu de travail.
-#
-#
-#Avoir des infos sur le prudhom d'origine
-#
-#AA protection syndicale
-#
-#Le plus Jury montant sans cause réélle et sérieuse et le plaignant.
-#
-#
-#
