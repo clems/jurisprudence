@@ -11,9 +11,6 @@ ce programme.
 
 import os
 import re
-from pprint import pprint
-import pandas as pd
-
 from os.path import join
 
 
@@ -38,7 +35,7 @@ def _test_jurinet(func, jurinet, nrows=0):
         jurinet['TEXTE_ARRET'].apply(func)
 
 
-def _test_pdfs(func):
+def _test_pdfs(func, path_data_recues):
     result_text = []
     for filename in os.listdir(path_data_recues):
         if filename.endswith('.txt'):

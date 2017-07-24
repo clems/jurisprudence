@@ -6,7 +6,6 @@ Created on Mon Jun 26 12:03:53 2017
 """
 
 import pandas as pd
-path_data_recues = 'D:\data\prudhommes'
 
 def _extract_brut_from_row(mot, row):
     temp = row['text'][row['idx'] + len(mot) :row['idx'] + 50]
@@ -79,5 +78,4 @@ if __name__ == '__main__':
 #    jurinet = jurinet_2015_prudhom()
 
     tt = exploitation(jurinet)
-#    tt = csv_from_jurinet(jurinet)
-#    tt.to_csv(join(path_data_recues, 'generees.csv'), index=False)
+
