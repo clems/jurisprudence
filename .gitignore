@@ -1,0 +1,5 @@
+*.pyc
+.ipynb_checkpoints
+.spyproject
+data
+stanford-postagger-full-2017-06-09
