@@ -27,7 +27,7 @@ def read_raw_csv(file_path, nrows=None):
             row_dict[child.tag] = child.text
         # store this dict in the main dict
         jurinet_dict[row_dict['ID_DOCUMENT']] = row_dict.copy()
-    print("the dict has {} entries".format(len(jurinet_dict)))
+    print("csv file had {} entries, the dict has {} entries".format(len(jurinet), len(jurinet_dict)))
     return jurinet_dict
 
 def preproccess_data(jurinet_dict):
@@ -42,25 +42,28 @@ def preproccess_data(jurinet_dict):
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
     return jurinet_df
 
-
-
-
-def filter_prudhomme(jurinet_df):
-    ''' filter decisions with the word "prud'hom" in text'''
+def filter_texte_arret(jurinet_df, word):
+    ''' filter decisions with the word "word" in text'''
     initial_len = len(jurinet_df)
     text = jurinet_df.TEXTE_ARRET
-    cond = (text.str.lower()).str.contains("prud'hom")
+    cond = (text.str.lower()).str.contains(word.lower())
     out = jurinet_df[cond]
     final_len = len(out)
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
     return out
 
 
-def filter_ccass(jurinet_df):
-    ''' filter decision of the Cour de cassation'''
+def filter_juridiction(jurinet_df, juridiction):
+    ''' filter decision of a specific juridication
+    juridiction may be "CCASS" for Cour de cassation, "CA" for Cour d'appel, None'''
+    if juridiction not in ("CCASS", "CA"):
+        raise "juridiction should be CCASS or CA"
     initial_len = len(jurinet_df)
     juri = jurinet_df.JURIDICTION
-    cond = (juri == 'cour de cassation')
+    if juridiction == "CCASS":
+        cond = (juri == 'cour de cassation')
+    elif juridiction == "CA":
+        cond = juri.str.contains("cour d'appel")
     out = jurinet_df[cond]
     final_len = len(out)
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
@@ -75,3 +78,4 @@ def filter_cdappel(jurinet_df):
     final_len = len(out)
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
     return out
+
