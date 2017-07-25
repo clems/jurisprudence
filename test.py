@@ -2,26 +2,27 @@
 """
 Created on Mon Jul 24 18:51:25 2017
 
-@author: cleme
+@author: clementschaff
 """
 
-# import jurinet data
-import tarfile
-tar = tarfile.open("data/jurinet_sans_dila.tar.gz")
-print(tar.getmembers())
-tar.extractall("data")
-tar.close()
+import os
+import pandas as pd
+
+from prudhomme.load_data import read_raw_csv, preproccess_data, filter_ccass, filter_prudhomme, filter_cdappel
 
 
-tar = tarfile.open("data/pseudonymisation-master-13db1ddfdf9843339c1c5971b8e73fa98fc9f460.tar.gz")
-tar.extractall("data")
-tar.close()
+project_path = os.getcwd()
+data_file = os.path.join(project_path, 'data', 'jurinet.csv')
+
+jurinet_dict = read_raw_csv(data_file, nrows = 1000)
+
+# convert the dict into a dataframe
+jurinet_df = preproccess_data(jurinet_dict)
+
+
+prudh = filter_prudhomme(jurinet_df)
+ccass = filter_ccass(jurinet_df)
+appel = filter_cdappel(jurinet_df)
 
 
 
-xml_file = 'data/EXPDP_JURINET_2015.DMP'
-from xml.etree import ElementTree as et
-e = et.parse(xml_file).getroott()
-
-from xml.dom import minidom
-e = minidom.parse(xml_file)        
