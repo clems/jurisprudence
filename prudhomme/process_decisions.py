@@ -42,20 +42,6 @@ def ie_preprocess_col(jurinet_df):
     return jurinet_df
 
 
-#import pickle, bs4, os
-#with open('data.pkl', 'rb') as f:
-#    juris = pickle.load(f)
-#    
-#soup_juris = [bs4.BeautifulSoup(d, "html5lib") for d in juris]
-#
-## work on the first example
-#doc = soup_juris[0].text
-#processed_doc = ie_preprocessing(doc)
-#for sent in processed_doc:
-#    print(sent)
-#    print("\n")
-#
-#
 #entities = nltk.chunk.ne_chunk(tags)
 #
 #from nltk.corpus import ieer
