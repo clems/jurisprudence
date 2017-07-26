@@ -11,22 +11,25 @@ Created on Fri Jul 21 12:16:42 2017
 
 import requests, bs4, pickle
 
-def legifrance_request(legifranceUrl = 'https://www.legifrance.gouv.fr/rechExpJuriJudi.do'):
+LEGIFRANCE_URL = 'https://www.legifrance.gouv.fr/rechExpJuriJudi.do'
+
+def legifrance_request(legifranceUrl = LEGIFRANCE_URL, decision_cour_appel = "on", annee = None):
     ''' Make a search on legifrance web site '''
+    
     _legifrance_request_params = {"champNumeroAffaire":None, 
                           "champDateDecision1J":None, 
                           "champDateDecision1M":None,   
                           "champDateDecision1A":None,
                           "champNatureDecision":None,
                           "champNumeroBulletin":None,   
-                          "champAnnee":None,
+                          "champAnnee": annee,
                           "champFormation":None,
                           "champDecisionAttaquee":None,
                           "champLieuDecisionAttaquee":None,
                           "champDecisionAttaqueeDateJ":None,
                           "champDecisionAttaqueeDateM":None,
                           "champDecisionAttaqueeDateA":None,
-                          "checkboxRechercheDecisionCourDAppel":"on",
+                          "checkboxRechercheDecisionCourDAppel": decision_cour_appel,
                           "champSiegeCour":None,
                           "champJuridiction":None,
                           "champLieu":None,
@@ -53,18 +56,17 @@ def legifrance_request(legifranceUrl = 'https://www.legifrance.gouv.fr/rechExpJu
 def append_jurisprudence_url(request, decision_url):
     ''' Get all decision url on a single page of results from a legifrance 
     search'''
-    jurisResult = bs4.BeautifulSoup(request.text)
+    jurisResult = bs4.BeautifulSoup(request.text, "html5lib")
     for result in jurisResult.select("li.resultat1"):
         decision_url.append([link.get('href') for link in result.select('a')])
     for result in jurisResult.select("li.resultat2"):
         decision_url.append([link.get('href') for link in result.select('a')])
 
-def get_decision_url(n_pages = 601, 
-                     legifranceUrl = 'https://www.legifrance.gouv.fr/rechExpJuriJudi.do'):
+def get_decision_url(n_pages = 600, legifranceUrl = LEGIFRANCE_URL):
     ''' Get all decision url on a legifrance search. A call to legifrance_request()
     should be done first'''
     decision_url = []
-    for i in range(1,n_pages):
+    for i in range(1, n_pages+1):
         res = requests.get(legifranceUrl, params = {"reprise":"true","page":str(i)})
         append_jurisprudence_url(res, decision_url)
     return decision_url
@@ -74,17 +76,21 @@ def get_decision_html(decision_url):
     decisions = []
     for decisionLink in decision_url:
         res = requests.get('https://www.legifrance.gouv.fr' + decisionLink[0])
-        decision = bs4.BeautifulSoup(res.text)
-        decisions.append(str(decision.select("div.data")[0]))
+        res.encoding = "UTF-8" # force utf-8 encoding
+        decision = bs4.BeautifulSoup(res.text,  "html5lib")
+        data_tag = decision.select("div.data")[0]
+        decisions.append(data_tag.text)
     return decisions
 
-def save_file(file = 'data.pkl', decisions):
-    with open('data.pkl', 'wb') as f:
+def save_file(file, decisions):
+    with open(file, 'wb') as f:
         pickle.dump(decisions, f)
 
-if __name__ == __main__:
+if __name__ == '__main__':
     ''' function should be called in this order'''
     legifrance_request()
-    decision_url = get_decision_url()
-    decisions = get_decision_html(decision_url)
-    
+    decision_url = get_decision_url(n_pages = 1)
+    print(decision_url)
+    decisions = get_decision_html(decision_url[:2])
+    type(decisions[0])
+    save_file("data/decisions_legifrance.pkl", decisions)
