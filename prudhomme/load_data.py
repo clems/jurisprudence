@@ -42,12 +42,12 @@ def preproccess_data(jurinet_dict):
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
     return jurinet_df
 
-def filter_texte_arret(jurinet_df, word):
+def filter_texte_arret(dataframe, word):
     ''' filter decisions with the word "word" in text'''
-    initial_len = len(jurinet_df)
-    text = jurinet_df.TEXTE_ARRET
+    initial_len = len(dataframe)
+    text = dataframe.TEXTE_ARRET
     cond = (text.str.lower()).str.contains(word.lower())
-    out = jurinet_df[cond]
+    out = dataframe[cond]
     final_len = len(out)
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
     return out
