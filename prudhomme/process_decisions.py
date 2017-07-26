@@ -22,17 +22,15 @@ def pos_tag(to_tag, stanford_postagger_path):
     tags = pos_tagger.tag(to_tag) #run the tagging algorithm on the tokenized raw text
     return tags
 
-def rep_thousand_sep(match):
-    return match.group(0)[-3:]
-
 def rmv_thousand_sep(doc):
-    return re.sub(r'\. [0-9]{3}(?![0-9])', rep_thousand_sep, doc)
+    return re.sub(r'\. [0-9]{3}(?![0-9])',lambda m: m.group(0)[-3:], doc)
 
 
 def ie_preprocessing(doc):
     ''' tokenize and tag sentences in document'''
     doc_clean = rmv_thousand_sep(doc)
-    sentences = nltk.sent_tokenize(doc_clean)
+    french_tok = nltk.data.load('tokenizers/punkt/french.pickle')
+    sentences = french_tok.tokenize(doc_clean)
     sentences = [nltk.word_tokenize(sent) for sent in sentences]
     return sentences
 
