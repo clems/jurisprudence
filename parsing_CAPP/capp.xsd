@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="TEXTE_JURI_JUDI" type="TEXTE_JURI_JUDI"/>
+
+    <xs:complexType name="TEXTE_JURI_JUDI">
+        <xs:sequence>
+            <xs:element name="META" type="META"/>
+            <xs:element name="TEXTE" type="TEXTE"/>
+            <xs:element name="LIENS" type="LIENS"/>
+        </xs:sequence>
+    </xs:complexType>
+ 
+    <xs:complexType name="META">
+        <xs:sequence>
+            <xs:element name="META_COMMUN" type="META_COMMUN"/>
+            <xs:element name="META_SPEC" type="META_SPEC"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="META_COMMUN">
+        <xs:sequence>
+            <xs:element name="ID" type="xs:string"/>
+            <xs:element name="ANCIEN_ID" type="xs:string"/>
+            <xs:element name="ORIGINE" type="xs:string"/>
+            <xs:element name="URL" type="xs:string"/>
+            <xs:element name="NATURE" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="META_SPEC">
+        <xs:sequence>
+            <xs:element name="META_JURI" type="META_JURI"/>
+            <xs:element name="META_JURI_JUDI" type="META_JURI_JUDI"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="META_JURI">
+        <xs:sequence>
+            <xs:element name="TITRE" type="xs:string"/>
+            <xs:element name="DATE_DEC" type="xs:date"/>
+            <xs:element name="JURIDICTION" type="xs:string"/>
+            <xs:element name="NUMERO" type="xs:string"/>
+            <xs:element name="SOLUTION" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="META_JURI_JUDI">
+        <xs:sequence>
+            <xs:element name="NUMEROS_AFFAIRES">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="NUMERO_AFFAIRE" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="PUBLI_BULL" >
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="publie" type="xs:string"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="FORMATION" type="xs:string"/>
+            <xs:element name="FORM_DEC_ATT" type="xs:string"/>
+            <xs:element name="DATE_DEC_ATT" type="xs:string"/>
+            <xs:element name="SIEGE_APPEL" type="xs:string"/>
+            <xs:element name="JURI_PREM" type="xs:string"/>
+            <xs:element name="LIEU_PREM" type="xs:string"/>
+            <xs:element name="DEMANDEUR" type="xs:string"/>
+            <xs:element name="DEFENDEUR" type="xs:string"/>
+            <xs:element name="PRESIDENT" type="xs:string"/>
+            <xs:element name="AVOCAT_GL" type="xs:string"/>
+            <xs:element name="AVOCATS" type="xs:string"/>
+            <xs:element name="RAPPORTEUR" type="xs:string"/>
+            <xs:element name="ECLI" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TEXTE">
+        <xs:sequence>
+            <xs:element name="BLOC_TEXTUEL" type="BLOC_TEXTUEL"/>
+            <xs:element name="SOMMAIRE" type="SOMMAIRE"/>
+            <xs:element name="CITATION_JP" type="CITATION_JP"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="BLOC_TEXTUEL">
+        <xs:sequence>
+            <xs:element name="CONTENU">
+                <xs:complexType mixed="true">
+                    <xs:sequence>
+                        <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:anyAttribute processContents="skip"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SOMMAIRE">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="SCT" type="SCT"/>
+                <xs:element name="ANA" type="ANA"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SCT">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="ID" type="xs:string"/>
+                <xs:attribute name="TYPE" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ANA">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="ID" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="CITATION_JP">
+        <xs:sequence>
+            <xs:element name="CONTENU" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="LIENS">
+        <xs:sequence>
+            <xs:element name="LIEN" type="LIEN" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="LIEN">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="cidtexte" type="xs:string"/>
+                <xs:attribute name="datesignatexte" type="xs:string"/>
+                <xs:attribute name="id" type="xs:string"/>
+                <xs:attribute name="naturetexte" type="xs:string"/>
+                <xs:attribute name="nortexte" type="xs:string"/>
+                <xs:attribute name="num" type="xs:string"/>
+                <xs:attribute name="numtexte" type="xs:string"/>
+                <xs:attribute name="sens" type="xs:string"/>
+                <xs:attribute name="typelien" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>
