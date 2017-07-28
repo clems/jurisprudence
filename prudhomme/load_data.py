@@ -47,7 +47,7 @@ def filter_texte_arret(dataframe, word):
     initial_len = len(dataframe)
     text = dataframe.TEXTE_ARRET
     cond = (text.str.lower()).str.contains(word.lower())
-    out = dataframe[cond]
+    out = dataframe[cond].reset_index(drop = True)
     final_len = len(out)
     print("there was {} entries in the table. There is now {} entries".format(initial_len, final_len ))
     return out

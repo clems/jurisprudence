@@ -22,25 +22,40 @@ def pos_tag(to_tag, stanford_postagger_path):
     tags = pos_tagger.tag(to_tag) #run the tagging algorithm on the tokenized raw text
     return tags
 
-def rmv_thousand_sep(doc):
-    return re.sub(r'\. [0-9]{3}(?![0-9])',lambda m: m.group(0)[-3:], doc)
+def clean_text(doc):
+    # remove decimal thousands separator '. ' from text
+    doc = re.sub(r'\. [0-9]{3}(?![0-9])',lambda m: m.group(0)[-3:], doc)
+    # replace decimal separator ', ' by '.'
+    doc = re.sub(r'[0-9]\, [0-9]{2}(?![0-9])',lambda m: m.group(0)[0] + '.' + m.group(0)[-2:], doc)
+    # clean law references such as 'L. 202' => 'L202' to make it easier to find sentences
+    doc = re.sub(r'([ \(])L. [0-9]',lambda m: m.group(0)[0] + 'L' + m.group(0)[-1], doc)
+    return doc
 
 
-def ie_preprocessing(doc):
+def preprocess_texte_arret(TEXTE_ARRET):
     ''' tokenize and tag sentences in document'''
-    doc_clean = rmv_thousand_sep(doc)
-    french_tok = nltk.data.load('tokenizers/punkt/french.pickle')
-    sentences = french_tok.tokenize(doc_clean)
-    sentences = [nltk.word_tokenize(sent) for sent in sentences]
-    return sentences
+    TEXTE_ARRET_CLEAN = TEXTE_ARRET.apply(clean_text)
+    return TEXTE_ARRET_CLEAN
 
 # sentences = [pos_tag(sent, stanford_postagger_path) for sent in sentences]
 
-def ie_preprocess_col(jurinet_df):
-    ''' apply ie_preprocessing to all decisions in the table'''
-    jurinet_df.TEXT_TOKEN = jurinet_df.TEXTE_ARRET.apply(ie_preprocessing)
-    return jurinet_df
+def tokenize_sent(TEXTE_ARRET):
+    ''' tokenize TEXTE_ARRET into sentences '''
+    extra_abreviations = ['l'] # add that to deal with "L. " (law references) 
+    french_tok = nltk.data.load('tokenizers/punkt/french.pickle')
+    french_tok._params.abbrev_types.update(extra_abreviations)
+    lambda_tok = lambda doc: french_tok.tokenize(doc)
+    return TEXTE_ARRET.apply(lambda_tok)
 
+def tokenize_words(SENTENCES):
+    ''' tokenize SENTENCES into words '''
+    lambda_word = lambda sentences: [nltk.word_tokenize(sent) for sent in sentences]
+    return SENTENCES.apply(lambda_word)
+
+def convert_nltk_text(TEXTE_ARRET):
+    ''' tokenize TEXTE_ARRET into nltk.Text '''
+    lambda_word = lambda texte: nltk.Text(nltk.word_tokenize(texte))
+    return TEXTE_ARRET.apply(lambda_word)
 
 #entities = nltk.chunk.ne_chunk(tags)
 #
@@ -58,16 +73,3 @@ def ie_preprocess_col(jurinet_df):
 #docs = ieer.parsed_docs(d)
 #print(docs[1].text)
 #
-######################################################################
-#### tests
-######################################################################
-#
-#
-#import unittest
-#
-#class TestJuris(unittest.TestCase):
-#    
-#    def test_rep_thousand_sep(self):
-#        self.assertEqual(rep_thousand_sep(".430"), "430"))
-#        
-#        
